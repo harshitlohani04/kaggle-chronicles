@@ -1,5 +1,7 @@
 # kaggle-chronicles
-Welcome to Kaggle Chronicles! This repository is a collection of my notebook solutions for various Kaggle competitions. Each notebook contains detailed solutions, including data exploration, preprocessing, model training, evaluation, and insights gained throughout the competition.
+Welcome to Kaggle Chronicles! This repository is a collection of my notebook solutions for various Kaggle competitions. Each notebook contains detailed solutions, including data exploration, preprocessing, model training, evaluation, and insights gained throughout the competition. 
+
+This repository is just myself improving over time and advancing in the competitions and eventually in the field of ML.(●'◡'●)
 
 # Overview
 This repository aims to:

@@ -13,9 +13,8 @@ This repository aims to:
 The repository is organized by competition. Each folder contains:
 
 1. Notebook: The main solution notebook in .ipynb format.
-2. Data: Data files used in the competition.
-3. Models: Trained models and results.
+2. About: This file contains the details regarding the data and the notebook.
    
-# Notebooks
+# Notebooks(Also the sequence in which I took part^_^)
 1. [Titanic Survival Prediction](https://www.kaggle.com/competitions/titanic): This is the most basic and beginner friendly kaggle competition. It involves the prediction whethere a person on the titanic will survive or not. My notebook code in this case was able to achieve an accuracy of 79.665% and a rank of 728/17157.
 2. [House Price Prediction - Advanced Regression](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques): A basic and beginner friendly competition on kaggle that deals with the prediction of House Price for a given number of parameters.

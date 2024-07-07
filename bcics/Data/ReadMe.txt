@@ -1,0 +1,2 @@
+I am not able to provide the data that the model was trained on beccause of its size. You can please refer to 
+https://www.kaggle.com/competitions/playground-series-s4e7/data if you want to explore the dataset that the model was trained on. 

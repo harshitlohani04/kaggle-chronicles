@@ -4,8 +4,10 @@ import os
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn import set_config
 from custom_transformers import custom_LabelEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
 
 rd = "D:/My Competitions/Binary Classification of Insurance Cross Selling/Data/train"
 
@@ -21,6 +23,13 @@ print(train_data.describe())
 # Dropping the unneccessary columns
 train_data = train_data.drop(columns=["id", "Driving_License"], axis=1)
 
-pipe1 = [("label encoder", custom_LabelEncoder())] # For the obj columns
-pipe2 = [("scaler", StandardScaler())] # For the integer columns
+objSteps = [("label encoder", custom_LabelEncoder())] # For the obj columns
+intSteps = [("scaler", StandardScaler())] # For the integer columns
+
+set_config(display="diagram")
+
+pipe1 = Pipeline(steps=objSteps)
+pipe2 = Pipeline(steps=intSteps)
+
+
 

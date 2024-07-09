@@ -18,3 +18,13 @@ class custom_LabelEncoder(BaseEstimator, TransformerMixin):
         for col in X_new.select_dtypes(include = object).columns:
             X_new[col] = self.label_encoder.fit_transform(X_new[col])
         return X_new
+    
+
+class testPipeline(BaseEstimator, TransformerMixin):
+    def __init__(self, X, intCols, objCols) -> None:
+        self.X = X
+        self.intCols = intCols
+        self.objCols = objCols
+    
+    def fit(self, X, y=None):
+        return self

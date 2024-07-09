@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from custom_transformers import custom_LabelEncoder
-from sklearn.pipeline import Pipeline
+from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
 
 rd = "D:/My Competitions/Binary Classification of Insurance Cross Selling/Data/train"
 
@@ -26,6 +27,9 @@ pipe1 = Pipeline(steps=objSteps)
 pipe2 = Pipeline(steps=intSteps)
 
 ct = ColumnTransformer(transformers=[("obj cols", pipe1, objCols), ("int cols", pipe2, intCols)])
+
+finalPipeline = make_pipeline(ct, RandomForestClassifier)
+
 X = train_data.drop(columns=["Response"], axis = 1)
 y = train_data["Response"]
 

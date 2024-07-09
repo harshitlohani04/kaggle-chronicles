@@ -4,7 +4,6 @@ import os
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn import set_config
 from custom_transformers import custom_LabelEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
@@ -17,19 +16,20 @@ train_data = pd.read_csv(os.path.join(rd, "train.csv"))
 objCols = train_data.select_dtypes(include = object)
 intCols = train_data.select_dtypes(include = np.number)
 
-# Visualizing the data
-print(train_data.describe())
-
 # Dropping the unneccessary columns
 train_data = train_data.drop(columns=["id", "Driving_License"], axis=1)
 
 objSteps = [("label encoder", custom_LabelEncoder())] # For the obj columns
 intSteps = [("scaler", StandardScaler())] # For the integer columns
 
-set_config(display="diagram")
-
 pipe1 = Pipeline(steps=objSteps)
 pipe2 = Pipeline(steps=intSteps)
+
+ct = ColumnTransformer(transformers=[("obj cols", pipe1, objCols), ("int cols", pipe2, intCols)])
+X = train_data.drop(columns=["Response"], axis = 1)
+y = train_data["Response"]
+
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.01, random_state=42)
 
 
 

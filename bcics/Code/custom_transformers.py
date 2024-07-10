@@ -20,11 +20,14 @@ class custom_LabelEncoder(BaseEstimator, TransformerMixin):
         return X_new
     
 
-class testPipeline(BaseEstimator, TransformerMixin):
-    def __init__(self, X, intCols, objCols) -> None:
-        self.X = X
-        self.intCols = intCols
-        self.objCols = objCols
+class ColumnDropper(BaseEstimator, TransformerMixin):
+    def __init__(self) -> None:
+        self.colsToDrop = ["id", "Driving_License"]
     
     def fit(self, X, y=None):
         return self
+    
+    def transform(self, X):
+        if not isinstance(X, pd.DataFrame):
+            X = pd.DataFrame(X)
+        return X.drop(columns = self.colsToDrop, axis = 1)

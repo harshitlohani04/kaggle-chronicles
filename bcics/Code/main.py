@@ -3,13 +3,16 @@ from pipeline import X, y, ct
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from rmse import rmse
+import numpy as np
 
 
 def findBestModel(x, testx, y, testy, params):
     minimum = 100
+    batch_size = 100000  # Adjust based on memory capacity
+    n_batches = int(np.ceil(X_train.shape[0] / batch_size))
     for estimator, depth in params:
         print("hello")
-        classifier = RandomForestClassifier(n_estimators=estimator, max_depth=depth)
+        classifier = RandomForestClassifier(n_estimators = estimator, max_depth = depth, n_jobs = -1)
         classifier.fit(x, y)
         y_pred = classifier.predict(testx)
         error = rmse(y_pred, testy)

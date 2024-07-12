@@ -8,12 +8,17 @@ import numpy as np
 
 def findBestModel(x, testx, y, testy, params):
     minimum = 100
-    batch_size = 100000  # Adjust based on memory capacity
-    n_batches = int(np.ceil(X_train.shape[0] / batch_size))
+    batch_size = 100000
+    n_batches = int(np.ceil(x.shape[0] / batch_size))
     for estimator, depth in params:
-        print("hello")
-        classifier = RandomForestClassifier(n_estimators = estimator, max_depth = depth, n_jobs = -1)
-        classifier.fit(x, y)
+        for i in range(n_batches):
+            print("hello")
+            start = i * batch_size
+            end = min((i + 1) * batch_size, x.shape[0])
+            X_batch = x[start:end]
+            y_batch = y[start:end]
+            classifier = RandomForestClassifier(n_estimators = estimator, max_depth = depth, n_jobs = -1)
+            classifier.fit(X_batch, y_batch)
         y_pred = classifier.predict(testx)
         error = rmse(y_pred, testy)
         if error<minimum:

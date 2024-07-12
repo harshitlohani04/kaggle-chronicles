@@ -1,5 +1,15 @@
 import os
 import pandas as pd
-from pipeline import finalPipeline, rd
+from pipeline import rd, ct
+from custom_transformers import ColumnDropper
+from main import model
 
 testData = pd.read_csv(os.path.join(rd, "test/test.csv"))
+cd = ColumnDropper()
+cd.fit(testData)
+train_data = cd.transform(testData)
+
+testData = ct.fit_transform(testData)
+
+predictions = model.predict(testData)
+print(predictions)

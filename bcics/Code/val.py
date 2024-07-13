@@ -2,7 +2,10 @@ import os
 import pandas as pd
 from pipeline import rd, ct
 from custom_transformers import ColumnDropper
-from main import model
+import pickle
+
+with open("bestModel.pkl", "rb") as f:
+    model = pickle.load(f)
 
 testData = pd.read_csv(os.path.join(rd, "test/test.csv"))
 cd = ColumnDropper()

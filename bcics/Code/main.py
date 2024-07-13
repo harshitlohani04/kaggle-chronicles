@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from rmse import rmse
 import numpy as np
+import pickle as pkl
 
 
 def findBestModel(x, valx, y, valy, params):
@@ -36,4 +37,7 @@ newXval = ct.transform(X_val)
 param = [(100, 5), (200, 5), (500, 5)]
 model, minError = findBestModel(Xnew, newXval, y_train, y_val, param)
 print(minError)
+
+with open("bestModel.pkl", "wb") as f:
+    pkl.dump(model, f)
 

@@ -26,29 +26,16 @@ def objective(trial, X, y, testx, testy):
 
     return score
 
-'''
-Custom hyper-tuner
-
-def fittingModel(x, valx, y, valy, params):
-    minimum = 100
+def fittingModel(x, y, model):
     batch_size = 100000
     n_batches = int(np.ceil(x.shape[0] / batch_size))
-    for estimator, depth in params:
-        print(f"Finding best model ---->>> Current params ----> estimator {estimator} , depth {depth}")
-        for i in range(n_batches):
-            start = i * batch_size
-            end = min((i + 1) * batch_size, x.shape[0])
-            X_batch = x[start:end]
-            y_batch = y[start:end]
-            classifier = RandomForestClassifier(n_estimators = estimator, max_depth = depth, n_jobs = -1)
-            classifier.fit(X_batch, y_batch)
-        y_pred = classifier.predict(valx)
-        error = rmse(y_pred, valy)
-        if error<minimum:
-            minimum = error
-            best_model = classifier
-    return best_model, minimum
-'''
+    for i in range(n_batches):
+        start = i * batch_size
+        end = min((i + 1) * batch_size, x.shape[0])
+        X_batch = x[start:end]
+        y_batch = y[start:end]
+        model.fit(X_batch, y_batch)
+    return model
 
 
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.01, random_state=42)
@@ -58,14 +45,14 @@ Xnew = ct.transform(X_train)
 newXval = ct.transform(X_val)
 
 study = optuna.create_study(direction = "maximize")
-study.optimize(lambda trial : objective(trial, Xnew, y_train, newXval, y_val), n_trials = 100)
+study.optimize(lambda trial : objective(trial, Xnew, y_train, newXval, y_val), n_trials = 10)
 
 # Retrieving the the best parameters
 best_params = study.best_trial.params
 print(best_params)
 
-finalmodel = RandomForestClassifier(n_estimators = best_params["n_estimators"], max_depth = best_params["max_depth"], n_jobs = -1, random_state = 42)
-finalmodel.fit(Xnew, y_train)
+model = RandomForestClassifier(n_estimators = best_params["n_estimators"], max_depth = best_params["max_depth"], n_jobs = -1, random_state = 42)
+finalmodel = fittingModel(Xnew, y_train, model)
 y_pred = finalmodel.predict(newXval)
 print(y_pred)
 

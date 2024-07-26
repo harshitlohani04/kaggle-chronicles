@@ -29,4 +29,3 @@ pipe2 = Pipeline(steps=intSteps)
 
 ct = ColumnTransformer(transformers=[("obj cols", pipe1, objCols), ("int cols", pipe2, intCols)])
 
-

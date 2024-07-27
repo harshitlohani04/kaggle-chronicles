@@ -20,7 +20,7 @@ test_data = cd.transform(testData)
 test_data = ct.fit_transform(test_data)
 
 predictions = model.predict(xgb.DMatrix(test_data))
-predictions = np.array([1 if pred>=0.08 else 0 for pred in predictions])
+predictions = np.array([1 if pred>=0.09 else 0 for pred in predictions])
 
 submission = np.concatenate([ids.reshape(-1, 1), predictions.reshape(-1, 1)], axis = 1)
 submission = pd.DataFrame(submission, columns = ["id", "Response"])

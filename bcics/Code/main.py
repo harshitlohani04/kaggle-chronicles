@@ -1,8 +1,6 @@
 # Model Training and evaluation
 from pipeline import X, y, ct
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from rmse import rmse
 import numpy as np
 import pickle as pkl
 import optuna
@@ -34,7 +32,7 @@ def objective(trial, X, y, testx, testy):
 
     batch_size = 100000
 
-    rounds = trial.suggest_int("rounds", 50, 150)
+    rounds = trial.suggest_int("rounds", 50, 200)
 
     n_batches = int(np.ceil(X.shape[0] / batch_size))
     for i in range(n_batches):
@@ -44,7 +42,7 @@ def objective(trial, X, y, testx, testy):
         X_batch = xgb.DMatrix(X[start:end], label = y_batch)
         model = xgb.train(current_params, X_batch, rounds)
     pred_val = model.predict(xgb.DMatrix(testx, label = testy))
-    score = roc_auc_score(testy, pred_val)
+    score = roc_auc_score(testy, [1 if pred>=0.1 else 0 for pred in pred_val])
 
     return score
 
@@ -68,7 +66,7 @@ Xnew = ct.transform(X_train)
 newXval = ct.transform(X_val)
 
 study = optuna.create_study(direction = "maximize")
-study.optimize(lambda trial : objective(trial, Xnew, y_train, newXval, y_val), n_trials = 30)
+study.optimize(lambda trial : objective(trial, Xnew, y_train, newXval, y_val), n_trials = 40)
 
 # Retrieving the the best parameters
 best_params = study.best_trial.params

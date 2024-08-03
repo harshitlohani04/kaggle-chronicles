@@ -11,7 +11,9 @@ PARAMS = {
     "max_depth": [2, 32],
     "eta": [0.01, 0.1],
     "subsample": [0.5, 1],
-    "colsample_bytree": [0.5, 1]
+    "colsample_bytree": [0.5, 1],
+    "lambda": [0.1, 10],
+    "alpha": [0.1, 10]
 }
 
 
@@ -21,13 +23,17 @@ def objective(trial, X, y, testx, testy):
     eta = trial.suggest_float("eta", PARAMS["eta"][0], PARAMS["eta"][1])
     subsample = trial.suggest_float("subsample", PARAMS["subsample"][0], PARAMS["subsample"][1])
     colsample_bytree = trial.suggest_float("colsample_bytree", PARAMS["colsample_bytree"][0], PARAMS["colsample_bytree"][1])
-    
+    lambda1 = trial.suggest_float("lambda", PARAMS["lambda"][0], PARAMS["lambda"][1])
+    alpha = trial.suggest_float("alpha", PARAMS["alpha"][0], PARAMS["alpha"][1])
+
     current_params = {
         "max_depth": max_depth,
         "eta": eta,
         "subsample": subsample,
         "colsample_bytree": colsample_bytree,
-        "objective": "binary:logistic"
+        "objective": "binary:logistic",
+        "lambda": lambda1,
+        "alpha": alpha
     }
 
     batch_size = 100000
@@ -42,7 +48,7 @@ def objective(trial, X, y, testx, testy):
         X_batch = xgb.DMatrix(X[start:end], label = y_batch)
         model = xgb.train(current_params, X_batch, rounds)
     pred_val = model.predict(xgb.DMatrix(testx, label = testy))
-    score = roc_auc_score(testy, [1 if pred>=0.1 else 0 for pred in pred_val])
+    score = roc_auc_score(testy, pred_val)
 
     return score
 
@@ -77,7 +83,9 @@ bestParams = {
     "eta" : best_params["eta"],
     "subsample" : best_params["subsample"],
     "colsample_bytree" : best_params["colsample_bytree"],
-    "objective" : "binary:logistic"
+    "objective" : "binary:logistic",
+    "lambda": best_params["lambda"],
+    "alpha": best_params["alpha"]
 }
 rounds = best_params["rounds"]
 
